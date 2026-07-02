@@ -201,12 +201,10 @@
       align-items: center;
       padding-left: 18px;
       font-weight: 900;
-      font-size: 18px;
+      font-size: 17px;
       letter-spacing: .5px;
       white-space: nowrap;
     }
-
-    .panel:nth-child(5) .panel-title { font-size: 17px; }
 
     .slash {
       width: 7px;
@@ -351,7 +349,8 @@
     .chart text {
       font-family: Arial, "PingFang TC", sans-serif;
       fill: #4e555c;
-      font-size: 11px;
+      font-size: 8px;
+      font-weight: 600;
     }
 
     .chart .gridline {
@@ -362,10 +361,11 @@
     }
 
     .chart .axis { stroke: #d3d7dc; stroke-width: 1; }
-    .chart .small { font-size: 6.8px; fill: #89939c; }
-    .chart .num-blue { fill: #2e86de; font-size: 10px; font-weight: 800; }
-    .chart .num-orange { fill: #ed7d19; font-size: 10px; font-weight: 800; }
-    .chart .legend-text { font-size: 9px; fill: #6c737a; }
+    .chart .small,
+    .chart .x-axis text { font-size: 7px; fill: #6f7883; font-weight: 700; }
+    .chart .num-blue { fill: #2e86de; font-size: 8px; font-weight: 800; }
+    .chart .num-orange { fill: #ed7d19; font-size: 8px; font-weight: 800; }
+    .chart .legend-text { font-size: 8px; fill: #6c737a; font-weight: 700; }
 
     .agent-fab {
       position: fixed;
@@ -793,7 +793,7 @@
               <rect x="310" y="40" width="11" height="75" fill="#2e86de"/><rect x="328" y="115" width="11" height="75" fill="#f7941d"/><rect x="347" y="115" width="7" height="8" fill="#999"/>
               <text class="num-blue" x="301" y="36">300000</text><text class="num-orange" x="317" y="202">-300000</text><text class="num-orange" x="342" y="128">3000</text>
             </g>
-            <g font-weight="800">
+            <g class="x-axis">
               <text x="5" y="225">2025-01</text><text x="65" y="225">2025-02</text><text x="125" y="225">2025-03</text>
               <text x="185" y="225">2025-04</text><text x="245" y="225">2025-05</text><text x="305" y="225">2025-06</text>
             </g>
@@ -862,7 +862,7 @@
               <rect x="285" y="73" width="10" height="132" fill="#2e86de"/><rect x="295" y="40" width="10" height="165" fill="#49c7dc"/>
               <rect x="331" y="73" width="10" height="132" fill="#2e86de"/><rect x="341" y="40" width="10" height="165" fill="#49c7dc"/>
             </g>
-            <g class="small"><text x="0" y="216">2025-01</text><text x="45" y="216">2025-02</text><text x="91" y="216">2025-03</text><text x="137" y="216">2025-04</text><text x="183" y="216">2025-05</text><text x="229" y="216">2025-06</text><text x="275" y="216">2025-07</text><text x="321" y="216">2025-08</text></g>
+            <g class="small"><text x="4" y="216">01月</text><text x="50" y="216">02月</text><text x="96" y="216">03月</text><text x="142" y="216">04月</text><text x="188" y="216">05月</text><text x="234" y="216">06月</text><text x="280" y="216">07月</text><text x="326" y="216">08月</text></g>
           </g>
         </svg>
       </article>
@@ -905,7 +905,7 @@
             <circle cx="16" cy="40" r="4"/><circle cx="62" cy="40" r="4"/><circle cx="108" cy="40" r="4"/><circle cx="154" cy="40" r="4"/>
             <circle cx="200" cy="40" r="4"/><circle cx="246" cy="40" r="4"/><circle cx="292" cy="40" r="4"/><circle cx="338" cy="40" r="4"/>
           </g>
-          <g class="small"><text x="0" y="211">2025-01</text><text x="45" y="211">2025-02</text><text x="91" y="211">2025-03</text><text x="137" y="211">2025-04</text><text x="183" y="211">2025-05</text><text x="229" y="211">2025-06</text><text x="275" y="211">2025-07</text><text x="321" y="211">2025-08</text></g>
+          <g class="small"><text x="4" y="211">01月</text><text x="50" y="211">02月</text><text x="96" y="211">03月</text><text x="142" y="211">04月</text><text x="188" y="211">05月</text><text x="234" y="211">06月</text><text x="280" y="211">07月</text><text x="326" y="211">08月</text></g>
         </g>
       </defs>
     </svg>
