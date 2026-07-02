@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>錸創營運能力儀表板</title>
+  <title>營運能力儀表板</title>
   <style>
     :root {
       --blue: #1976d2;
@@ -734,13 +734,12 @@
   </style>
 </head>
 <body>
-  <main class="dashboard" aria-label="錸創營運能力儀表板">
+  <main class="dashboard" aria-label="營運能力儀表板">
     <header class="hero">
       <div class="brand">
-        <span class="mark"><i class="r"></i><i class="b"></i><i class="g"></i></span>
         <span>LAYNITRIDE</span>
       </div>
-      <div class="title">錸創營運能力</div>
+      <div class="title">營運能力</div>
       <div></div>
     </header>
 
@@ -955,7 +954,7 @@
 
           <div class="agent-intro">
             <div class="agent-avatar" aria-hidden="true"></div>
-            <h3>營運資金分析--錸創營運能力小助手</h3>
+            <h3>營運資金分析--營運能力小助手</h3>
           </div>
 
           <p class="agent-copy">
@@ -1051,7 +1050,7 @@
       if (q.includes("安全") || q.includes("水位") || q.includes("警戒")) {
         return `${dashboardFacts.runway} 不過這只是預估圖，真正決策前還需要比對銀行實際餘額、應收帳款收款日與大額付款排程。`;
       }
-      return `我先依這張「錸創營運能力」儀表板回答：${dashboardFacts.totals} ${dashboardFacts.cashflow} 若之後接上 AI API，我可以改成讀取即時資料後，自動產生原因分析與改善建議。`;
+      return `我先依這張「營運能力」儀表板回答：${dashboardFacts.totals} ${dashboardFacts.cashflow} 若之後接上 AI API，我可以改成讀取即時資料後，自動產生原因分析與改善建議。`;
     }
 
     function submitQuestion(question) {
