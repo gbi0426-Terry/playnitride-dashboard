@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>錸創營運能力儀表板</title>
+  <style>
+    :root {
+      --blue: #1976d2;
+      --deep-blue: #0b64be;
+      --orange: #f7941d;
+      --yellow: #ffc64b;
+      --cyan: #49c7dc;
+      --grid: #7890a4;
+      --card: #fff;
+      --line: #dcdfe3;
+      --ink: #101820;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      background: #f3f5f7;
+      color: var(--ink);
+      font-family: "Arial", "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    .dashboard {
+      width: min(1283px, 100vw);
+      min-height: 811px;
+      background: #f8f9fb;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.07);
+    }
+
+    .hero {
+      height: 69px;
+      position: relative;
+      display: grid;
+      grid-template-columns: 270px 1fr 160px;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      background:
+        radial-gradient(circle at 58% 93%, rgba(87,255,242,.92) 0, rgba(50,195,232,.75) 7%, rgba(25,118,210,.7) 16%, transparent 31%),
+        linear-gradient(162deg, rgba(255,255,255,.08), transparent 28%),
+        linear-gradient(180deg, #176fc9 0%, #0f62bd 100%);
+    }
+
+    .hero:before,
+    .hero:after {
+      content: "";
+      position: absolute;
+      background: rgba(64, 193, 235, .18);
+      border-radius: 2px;
+    }
+
+    .hero:before { width: 25px; height: 33px; right: 198px; top: 7px; box-shadow: -52px 48px 0 rgba(64,193,235,.16), 105px 21px 0 rgba(255,255,255,.95); }
+    .hero:after { width: 22px; height: 18px; right: 213px; top: 54px; box-shadow: 140px -43px 0 rgba(11,98,189,.16), 126px -42px 0 rgba(11,98,189,.11); }
+
+    .brand {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 29px;
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    .mark {
+      width: 31px;
+      height: 43px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mark i { position: absolute; display: block; }
+    .mark .r { width: 31px; height: 11px; left: 0; top: 2px; background: #e4212b; border-radius: 7px 9px 9px 0; }
+    .mark .b { width: 10px; height: 33px; left: 0; top: 12px; background: #42b9e9; }
+    .mark .g { width: 25px; height: 12px; left: 8px; top: 14px; background: #40b653; border-radius: 0 8px 8px 0; }
+    .brand span { line-height: 1; }
+
+    .title {
+      position: relative;
+      z-index: 1;
+      align-self: start;
+      margin-top: 7px;
+      justify-self: center;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      text-shadow: 0 1px 2px rgba(0,0,0,.18);
+      white-space: nowrap;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      padding: 12px 14px 10px;
+    }
+
+    .metric {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 15px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.03);
+    }
+
+    .building {
+      width: 40px;
+      height: 46px;
+      border-radius: 3px;
+      background: #42b8ec;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .building:before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 28px;
+      left: 12px;
+      top: 10px;
+      border-left: 4px solid white;
+      border-bottom: 4px solid white;
+      opacity: .96;
+    }
+
+    .building:after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      left: 16px;
+      top: 16px;
+      background: white;
+      box-shadow: 11px 11px 0 white, 0 12px 0 white;
+    }
+
+    .metric strong {
+      display: inline-block;
+      color: var(--blue);
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      margin-right: 6px;
+      white-space: nowrap;
+    }
+
+    .metric .unit {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 800;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .metric p {
+      margin: 8px 0 0;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 0 0 0;
+    }
+
+    .panel {
+      height: 304px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,.03);
+    }
+
+    .panel.bottom { height: 306px; }
+
+    .panel-title {
+      height: 37px;
+      display: flex;
+      align-items: center;
+      padding-left: 18px;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: .5px;
+      white-space: nowrap;
+    }
+
+    .panel:nth-child(5) .panel-title { font-size: 17px; }
+
+    .slash {
+      width: 7px;
+      height: 17px;
+      display: inline-block;
+      margin-right: 8px;
+      background: var(--blue);
+      border-radius: 4px;
+      transform: skew(-13deg);
+      box-shadow: 7px 0 0 var(--orange);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin: 1px 11px 0;
+      height: 21px;
+    }
+
+    .tab {
+      border-left: 1px solid #42a5ff;
+      padding-left: 11px;
+      font-size: 16px;
+      letter-spacing: 1px;
+      line-height: 21px;
+      background: linear-gradient(90deg, rgba(66,165,255,.06), transparent 74%);
+    }
+
+    .donut-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 25px 24px 0 28px;
+    }
+
+    .donut-area {
+      position: relative;
+      height: 181px;
+    }
+
+    .donut {
+      width: 88px;
+      height: 88px;
+      margin: 24px auto 0;
+      border-radius: 50%;
+      background: conic-gradient(#2e86de 0 18%, #8bdde4 18% 22%, #ffa22b 22% 78%, #ffc247 78% 100%);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
+    }
+
+    .donut:after {
+      content: "$";
+      position: absolute;
+      inset: 27px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: white;
+      color: #5eb6df;
+      font-weight: 900;
+      font-size: 28px;
+      border: 1px solid #e8eef2;
+    }
+
+    .donut.house:after {
+      content: "";
+      background: white;
+    }
+
+    .donut.house .mini-building {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      left: 33px;
+      top: 33px;
+      z-index: 2;
+      background: var(--blue);
+      clip-path: polygon(50% 0, 88% 32%, 88% 100%, 12% 100%, 12% 32%);
+    }
+
+    .donut.house .mini-building:after {
+      content: "";
+      position: absolute;
+      width: 3px;
+      height: 9px;
+      left: 9px;
+      bottom: 0;
+      background: white;
+      box-shadow: -5px -5px 0 white, 5px -5px 0 white;
+    }
+
+    .label {
+      position: absolute;
+      font-size: 13px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .label.ntd { color: #2e86de; right: 15px; top: 4px; }
+    .label.other { color: #77d6dd; right: -1px; top: 36px; }
+    .label.usd { color: #ffa22b; right: 38px; bottom: 16px; }
+    .label.jpy { color: #ffc247; left: 10px; top: 12px; }
+    .leader {
+      position: absolute;
+      height: 1px;
+      background: currentColor;
+      opacity: .8;
+    }
+    .ntd .leader { width: 18px; left: -23px; top: 8px; transform: rotate(-26deg); }
+    .other .leader { width: 18px; left: -22px; top: 8px; }
+    .usd .leader { width: 17px; left: -14px; top: -4px; transform: rotate(90deg); }
+    .jpy .leader { width: 17px; right: -19px; top: 14px; transform: rotate(33deg); }
+
+    .legend {
+      position: absolute;
+      left: 48px;
+      bottom: 9px;
+      display: grid;
+      grid-template-columns: 70px 80px;
+      gap: 8px 0;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .8px;
+    }
+
+    .legend b {
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      margin-right: 22px;
+      vertical-align: 0;
+    }
+
+    .chart {
+      width: 100%;
+      height: calc(100% - 37px);
+      display: block;
+      padding: 0 12px 8px;
+    }
+
+    .chart text {
+      font-family: Arial, "PingFang TC", sans-serif;
+      fill: #4e555c;
+      font-size: 11px;
+    }
+
+    .chart .gridline {
+      stroke: var(--grid);
+      stroke-width: 1;
+      stroke-dasharray: 4 5;
+      opacity: .68;
+    }
+
+    .chart .axis { stroke: #d3d7dc; stroke-width: 1; }
+    .chart .small { font-size: 8.5px; fill: #89939c; }
+    .chart .num-blue { fill: #2e86de; font-size: 10px; font-weight: 800; }
+    .chart .num-orange { fill: #ed7d19; font-size: 10px; font-weight: 800; }
+    .chart .legend-text { font-size: 9px; fill: #6c737a; }
+
+    .float-icon {
+      position: absolute;
+      right: 55px;
+      top: 14px;
+      width: 37px;
+      height: 37px;
+      border-radius: 50%;
+      background: #2f80ed;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 17px rgba(47,128,237,.28);
+      color: white;
+      font-size: 18px;
+      z-index: 2;
+    }
+
+    .float-icon svg { width: 19px; height: 19px; stroke: white; fill: none; stroke-width: 2; }
+
+    .agent-fab {
+      position: fixed;
+      right: 28px;
+      bottom: 26px;
+      z-index: 20;
+      width: 68px;
+      height: 68px;
+      border: 0;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2d63ff 0%, #2fc3dd 100%);
+      box-shadow: 0 16px 34px rgba(29, 101, 210, .32);
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    .agent-fab:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 38px rgba(29, 101, 210, .42);
+    }
+
+    .agent-fab svg {
+      width: 34px;
+      height: 34px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .agent-shell {
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 30;
+      width: min(560px, 100vw);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: -18px 0 42px rgba(22, 38, 66, .18);
+      transform: translateX(104%);
+      transition: transform .25s ease;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #dde3eb;
+    }
+
+    body.agent-open .agent-shell { transform: translateX(0); }
+    body.agent-open .agent-fab { opacity: 0; pointer-events: none; }
+
+    .agent-header {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      padding: 0 28px;
+      border-bottom: 1px solid #dce2ea;
+      background: white;
+    }
+
+    .agent-logo {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      background: linear-gradient(135deg, #2d63ff, #52d6e7);
+      position: relative;
+    }
+
+    .agent-logo:after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      right: -2px;
+      top: -2px;
+      background: #5cc8ff;
+      clip-path: polygon(50% 0, 62% 35%, 100% 50%, 62% 65%, 50% 100%, 38% 65%, 0 50%, 38% 35%);
+    }
+
+    .agent-header h2 {
+      margin: 0;
+      flex: 1;
+      color: #263955;
+      font-size: 36px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .agent-close {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #42526b;
+      cursor: pointer;
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .agent-body {
+      flex: 1;
+      min-height: 0;
+      padding: 20px 18px 18px;
+      overflow: auto;
+      background: linear-gradient(135deg, #f1e7ff 0%, #e5f6ff 100%);
+    }
+
+    .agent-card {
+      min-height: 100%;
+      padding: 34px 20px 24px;
+      border: 3px solid white;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(239, 231, 255, .88), rgba(231, 249, 255, .86));
+    }
+
+    .agent-toolbar {
+      height: 52px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 28px;
+      color: #334b69;
+      opacity: .9;
+    }
+
+    .agent-toolbar svg {
+      width: 27px;
+      height: 27px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .agent-intro {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 258px 0 28px;
+    }
+
+    .agent-avatar {
+      width: 106px;
+      height: 106px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 15px 24px rgba(69, 92, 126, .08);
+    }
+
+    .agent-avatar:before {
+      content: "";
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #2b66ff 0 54%, #36d0de 55% 100%);
+      border-radius: 22px 22px 22px 4px;
+      transform: rotate(33deg);
+    }
+
+    .agent-intro h3 {
+      margin: 0;
+      color: #253753;
+      font-size: 32px;
+      line-height: 1.28;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .agent-copy {
+      margin: 0 0 22px;
+      padding: 24px 28px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 17px;
+      color: #2f415f;
+      background: rgba(255,255,255,.45);
+      font-size: 18px;
+      line-height: 1.68;
+    }
+
+    .agent-prompts {
+      border-radius: 18px;
+      background: rgba(255,255,255,.62);
+      overflow: hidden;
+      box-shadow: 0 18px 35px rgba(69, 92, 126, .08);
+    }
+
+    .agent-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: end;
+      color: #465875;
+      font-size: 17px;
+      text-align: center;
+      background: transparent;
+    }
+
+    .agent-tabs button {
+      min-height: 58px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .agent-tabs .active {
+      color: #263955;
+      font-weight: 900;
+      border-radius: 18px 18px 0 0;
+      background: white;
+      box-shadow: 0 -12px 22px rgba(69, 92, 126, .08);
+    }
+
+    .prompt-list {
+      margin: 0;
+      padding: 18px 28px 18px;
+      list-style: none;
+      background: white;
+    }
+
+    .prompt-list button {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-bottom: 1px solid #dfe5ee;
+      background: transparent;
+      color: #263955;
+      font-size: 17px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .prompt-list li:last-child button { border-bottom: 0; }
+    .prompt-list button:before {
+      content: "✦";
+      color: #3369ff;
+      margin-right: 13px;
+      font-size: 16px;
+    }
+
+    .agent-messages {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 18px;
+    }
+
+    .agent-message {
+      max-width: 88%;
+      padding: 13px 15px;
+      border-radius: 16px;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #263955;
+      background: white;
+      box-shadow: 0 8px 18px rgba(69, 92, 126, .08);
+    }
+
+    .agent-message.user {
+      justify-self: end;
+      color: white;
+      background: linear-gradient(135deg, #2d7be8, #28bdd7);
+    }
+
+    .agent-input {
+      margin-top: 72px;
+      border: 2px solid #d9dee7;
+      border-radius: 22px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .agent-input textarea {
+      width: 100%;
+      height: 116px;
+      padding: 21px 26px;
+      border: 0;
+      resize: none;
+      outline: none;
+      color: #263955;
+      font: 18px/1.5 Arial, "PingFang TC", sans-serif;
+    }
+
+    .agent-input textarea::placeholder { color: #9aa5b5; }
+
+    .agent-actions {
+      height: 54px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 17px 13px;
+    }
+
+    .agent-icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: #f3f5f9;
+      color: #233957;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .agent-icon-btn svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .agent-icon-btn.send { color: #8390a3; }
+
+    .agent-note {
+      margin: 18px 0 0;
+      text-align: center;
+      color: #98a2b2;
+      font-size: 17px;
+    }
+
+    .agent-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      background: rgba(13, 28, 48, .16);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    body.agent-open .agent-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 900px) {
+      body { place-items: start; }
+      .dashboard { width: 1283px; transform-origin: top left; transform: scale(calc(100vw / 1283)); }
+      .agent-shell { width: 100vw; }
+      .agent-intro { margin-top: 120px; grid-template-columns: 82px 1fr; }
+      .agent-avatar { width: 82px; height: 82px; }
+      .agent-intro h3 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard" aria-label="錸創營運能力儀表板">
+    <header class="hero">
+      <div class="brand">
+        <span class="mark"><i class="r"></i><i class="b"></i><i class="g"></i></span>
+        <span>LAYNITRIDE</span>
+      </div>
+      <div class="title">錸創營運能力</div>
+      <div></div>
+    </header>
+
+    <section class="summary" aria-label="總金額摘要">
+      <article class="metric"><span class="building"></span><div><strong>8000000</strong><span class="unit">元</span><p>總金額（NTD）</p></div></article>
+      <article class="metric"><span class="building"></span><div><strong>50000</strong><span class="unit">元</span><p>總金額（USD）</p></div></article>
+      <article class="metric"><span class="building"></span><div><strong>90000</strong><span class="unit">元</span><p>總金額（JPY）</p></div></article>
+      <article class="metric"><span class="building"></span><div><strong>90000</strong><span class="unit">元</span><p>總金額（xxx）</p></div></article>
+      <article class="metric"><span class="building"></span><div><strong>90000</strong><span class="unit">元</span><p>總金額（xxx）</p></div></article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2 class="panel-title"><span class="slash"></span>集團及錸顯各幣別餘額</h2>
+        <div class="tabs"><div class="tab">集團各幣別餘額</div><div class="tab">錸顯各幣別餘額</div></div>
+        <div class="donut-wrap">
+          <div class="donut-area">
+            <div class="donut"></div>
+            <span class="label ntd">NTD<br>30<span class="leader"></span></span>
+            <span class="label other">OTHER<br>5<span class="leader"></span></span>
+            <span class="label usd">USD<br>80<span class="leader"></span></span>
+            <span class="label jpy">JPY<br>40<span class="leader"></span></span>
+          </div>
+          <div class="donut-area">
+            <div class="donut house"><span class="mini-building"></span></div>
+            <span class="label ntd">NTD<br>30<span class="leader"></span></span>
+            <span class="label other">OTHER<br>5<span class="leader"></span></span>
+            <span class="label usd">USD<br>80<span class="leader"></span></span>
+            <span class="label jpy">JPY<br>40<span class="leader"></span></span>
+          </div>
+        </div>
+        <div class="legend">
+          <span><b style="background:#2e86de"></b>NTD</span><span><b style="background:#8bdde4"></b>OTHER</span>
+          <span><b style="background:#ffa22b"></b>USD</span><span><b style="background:#ffc247"></b>JPY</span>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2 class="panel-title"><span class="slash"></span>2025/01~2025/6月預估現:</h2>
+        <div class="float-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M5 9h14l-1 11H6L5 9Z"/><path d="M9 13l3 3 4-6"/></svg>
+        </div>
+        <svg class="chart" viewBox="0 0 420 260" role="img" aria-label="2025 年 1 月到 6 月預估現金長條圖">
+          <g transform="translate(50 28)">
+            <g class="legend-text">
+              <rect x="90" y="-16" width="8" height="8" fill="#2e86de"/><text x="103" y="-9">現金流入</text>
+              <rect x="150" y="-16" width="8" height="8" fill="#f7941d"/><text x="163" y="-9">現金流出</text>
+              <rect x="210" y="-16" width="8" height="8" fill="#999"/><text x="223" y="-9">淨流出</text>
+            </g>
+            <line class="gridline" x1="0" y1="15" x2="350" y2="15"/><text x="-40" y="19">400000</text>
+            <line class="gridline" x1="0" y1="40" x2="350" y2="40"/><text x="-40" y="44">300000</text>
+            <line class="gridline" x1="0" y1="65" x2="350" y2="65"/><text x="-40" y="69">200000</text>
+            <line class="gridline" x1="0" y1="90" x2="350" y2="90"/><text x="-40" y="94">100000</text>
+            <line class="gridline" x1="0" y1="115" x2="350" y2="115"/><text x="-14" y="119">0</text>
+            <line class="gridline" x1="0" y1="140" x2="350" y2="140"/><text x="-47" y="144">-100000</text>
+            <line class="gridline" x1="0" y1="165" x2="350" y2="165"/><text x="-47" y="169">-200000</text>
+            <line class="gridline" x1="0" y1="190" x2="350" y2="190"/><text x="-47" y="194">-300000</text>
+            <line class="gridline" x1="0" y1="215" x2="350" y2="215"/><text x="-47" y="219">-400000</text>
+            <line class="axis" x1="0" y1="115" x2="350" y2="115"/>
+            <g>
+              <rect x="10" y="90" width="11" height="25" fill="#2e86de"/><rect x="28" y="115" width="11" height="75" fill="#f7941d"/><rect x="47" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="2" y="86">100000</text><text class="num-orange" x="17" y="202">-300000</text><text class="num-orange" x="42" y="128">-3000</text>
+              <rect x="70" y="65" width="11" height="50" fill="#2e86de"/><rect x="88" y="115" width="11" height="75" fill="#f7941d"/><rect x="107" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="60" y="61">200000</text><text class="num-orange" x="77" y="202">-300000</text><text class="num-orange" x="102" y="128">-3000</text>
+              <rect x="130" y="78" width="11" height="37" fill="#2e86de"/><rect x="148" y="115" width="11" height="75" fill="#f7941d"/><rect x="167" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="122" y="74">150000</text><text class="num-orange" x="137" y="202">-300000</text><text class="num-orange" x="162" y="128">-3000</text>
+              <rect x="190" y="90" width="11" height="25" fill="#2e86de"/><rect x="208" y="115" width="11" height="75" fill="#f7941d"/><rect x="227" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="181" y="86">100000</text><text class="num-orange" x="197" y="202">-300000</text><text class="num-orange" x="222" y="128">-3000</text>
+              <rect x="250" y="52" width="11" height="63" fill="#2e86de"/><rect x="268" y="115" width="11" height="75" fill="#f7941d"/><rect x="287" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="241" y="48">250000</text><text class="num-orange" x="257" y="202">-300000</text><text class="num-orange" x="282" y="128">-3000</text>
+              <rect x="310" y="40" width="11" height="75" fill="#2e86de"/><rect x="328" y="115" width="11" height="75" fill="#f7941d"/><rect x="347" y="115" width="7" height="8" fill="#999"/>
+              <text class="num-blue" x="301" y="36">300000</text><text class="num-orange" x="317" y="202">-300000</text><text class="num-orange" x="342" y="128">3000</text>
+            </g>
+            <g font-weight="800">
+              <text x="5" y="235">2025-01</text><text x="65" y="235">2025-02</text><text x="125" y="235">2025-03</text>
+              <text x="185" y="235">2025-04</text><text x="245" y="235">2025-05</text><text x="305" y="235">2025-06</text>
+            </g>
+          </g>
+        </svg>
+      </article>
+
+      <article class="panel">
+        <h2 class="panel-title"><span class="slash"></span>USD近期匯率及去年同期比較</h2>
+        <svg class="chart" viewBox="0 0 420 260" role="img" aria-label="USD 近期匯率折線圖">
+          <g transform="translate(31 29)">
+            <g class="legend-text">
+              <line x1="33" y1="-10" x2="42" y2="-10" stroke="#39c3e6" stroke-width="2"/><text x="46" y="-7">2024即期買入</text>
+              <line x1="116" y1="-10" x2="125" y2="-10" stroke="#2e86de" stroke-width="2"/><text x="129" y="-7">2024即期賣出</text>
+              <line x1="205" y1="-10" x2="214" y2="-10" stroke="#ffd166" stroke-width="2"/><text x="218" y="-7">2023即期買入</text>
+              <line x1="292" y1="-10" x2="301" y2="-10" stroke="#ff7f50" stroke-width="2"/><text x="305" y="-7">2023即期賣出</text>
+            </g>
+            <line class="gridline" x1="0" y1="7" x2="370" y2="7"/><text x="-15" y="10">40</text>
+            <line class="gridline" x1="0" y1="34" x2="370" y2="34"/><text x="-15" y="37">38</text>
+            <line class="gridline" x1="0" y1="61" x2="370" y2="61"/><text x="-15" y="64">36</text>
+            <line class="gridline" x1="0" y1="88" x2="370" y2="88"/><text x="-15" y="91">34</text>
+            <line class="gridline" x1="0" y1="115" x2="370" y2="115"/><text x="-15" y="118">32</text>
+            <line class="gridline" x1="0" y1="142" x2="370" y2="142"/><text x="-15" y="145">30</text>
+            <line class="gridline" x1="0" y1="169" x2="370" y2="169"/><text x="-15" y="172">28</text>
+            <line class="gridline" x1="0" y1="196" x2="370" y2="196"/><text x="-15" y="199">26</text>
+            <polyline points="8,140 25,126 43,134 62,107 80,130 98,105 116,93 135,93 153,126 171,132 190,157 208,151 227,180 245,180 264,154 282,146 301,138 319,130 338,145 356,93 368,142" fill="none" stroke="#39c3e6" stroke-width="2"/>
+            <polyline points="8,150 25,135 43,108 62,108 80,105 98,84 116,82 135,61 153,105 171,104 190,138 208,129 227,171 245,168 264,155 282,144 301,134 319,124 338,115 356,119 368,103" fill="none" stroke="#2e86de" stroke-width="2"/>
+            <polyline points="8,157 25,143 43,124 62,135 80,105 98,113 116,70 135,134 153,113 171,145 190,136 208,155 227,194 245,194 264,196 282,169 301,182 319,182 338,76 356,181 368,132" fill="none" stroke="#ffd166" stroke-width="2"/>
+            <polyline points="8,125 25,108 43,107 62,130 80,130 98,130 116,101 135,101 153,87 171,115 190,107 208,128 227,131 245,154 264,142 282,154 301,144 319,132 338,141 356,141 368,141" fill="none" stroke="#ff7f50" stroke-width="2"/>
+            <g class="small">
+              <text x="-3" y="216">02-02</text><text x="34" y="216">02-04</text><text x="72" y="216">02-06</text><text x="109" y="216">02-08</text>
+              <text x="146" y="216">02-10</text><text x="183" y="216">02-12</text><text x="220" y="216">02-14</text><text x="257" y="216">02-16</text>
+              <text x="294" y="216">02-18</text><text x="331" y="216">02-20</text>
+            </g>
+          </g>
+        </svg>
+      </article>
+
+      <article class="panel bottom">
+        <h2 class="panel-title"><span class="slash"></span>集團未來六個月底資金水位預估</h2>
+        <svg class="chart" viewBox="0 0 420 260" role="img" aria-label="集團資金水位預估">
+          <use href="#waterChart"/>
+        </svg>
+      </article>
+
+      <article class="panel bottom">
+        <h2 class="panel-title"><span class="slash"></span>集團未來六個月底資金水位預估(含CB+CI金額)</h2>
+        <svg class="chart" viewBox="0 0 420 260" role="img" aria-label="含 CB CI 資金水位預估">
+          <g transform="translate(57 30)">
+            <rect x="110" y="-15" width="8" height="8" fill="#2e86de"/><text class="legend-text" x="122" y="-8">預估費用</text>
+            <rect x="173" y="-15" width="8" height="8" fill="#49c7dc"/><text class="legend-text" x="185" y="-8">預估進帳</text>
+            <line class="gridline" x1="0" y1="7" x2="350" y2="7"/><text x="-38" y="11">350000</text>
+            <line class="gridline" x1="0" y1="40" x2="350" y2="40"/><text x="-38" y="44">300000</text>
+            <line class="gridline" x1="0" y1="73" x2="350" y2="73"/><text x="-38" y="77">250000</text>
+            <line class="gridline" x1="0" y1="106" x2="350" y2="106"/><text x="-38" y="110">200000</text>
+            <line class="gridline" x1="0" y1="139" x2="350" y2="139"/><text x="-38" y="143">150000</text>
+            <line class="gridline" x1="0" y1="172" x2="350" y2="172"/><text x="-38" y="176">100000</text>
+            <line class="gridline" x1="0" y1="205" x2="350" y2="205"/><text x="-15" y="209">0</text>
+            <g>
+              <rect x="9" y="73" width="10" height="132" fill="#2e86de"/><rect x="19" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="55" y="73" width="10" height="132" fill="#2e86de"/><rect x="65" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="101" y="73" width="10" height="132" fill="#2e86de"/><rect x="111" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="147" y="73" width="10" height="132" fill="#2e86de"/><rect x="157" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="193" y="73" width="10" height="132" fill="#2e86de"/><rect x="203" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="239" y="73" width="10" height="132" fill="#2e86de"/><rect x="249" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="285" y="73" width="10" height="132" fill="#2e86de"/><rect x="295" y="40" width="10" height="165" fill="#49c7dc"/>
+              <rect x="331" y="73" width="10" height="132" fill="#2e86de"/><rect x="341" y="40" width="10" height="165" fill="#49c7dc"/>
+            </g>
+            <g class="small"><text x="0" y="227">2025-01</text><text x="45" y="227">2025-02</text><text x="91" y="227">2025-03</text><text x="137" y="227">2025-04</text><text x="183" y="227">2025-05</text><text x="229" y="227">2025-06</text><text x="275" y="227">2025-07</text><text x="321" y="227">2025-08</text></g>
+          </g>
+        </svg>
+      </article>
+
+      <article class="panel bottom">
+        <h2 class="panel-title"><span class="slash"></span>錸顯未來六個月底資金水位預估</h2>
+        <svg class="chart" viewBox="0 0 420 260" role="img" aria-label="錸顯資金水位預估">
+          <use href="#waterChart"/>
+        </svg>
+      </article>
+    </section>
+
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <g id="waterChart" transform="translate(57 30)">
+          <rect x="84" y="-15" width="8" height="8" fill="#2e86de"/><text class="legend-text" x="96" y="-8">預估費用</text>
+          <rect x="153" y="-15" width="8" height="8" fill="#49c7dc"/><text class="legend-text" x="165" y="-8">預估進帳</text>
+          <line x1="222" y1="-11" x2="234" y2="-11" stroke="#f7941d" stroke-width="2"/><text class="legend-text" x="238" y="-8">警戒線</text>
+          <line class="gridline" x1="0" y1="7" x2="350" y2="7"/><text x="-38" y="11">250000</text>
+          <line class="gridline" x1="0" y1="31" x2="350" y2="31"/><text x="-38" y="35">200000</text>
+          <line class="gridline" x1="0" y1="55" x2="350" y2="55"/><text x="-38" y="59">150000</text>
+          <line class="gridline" x1="0" y1="79" x2="350" y2="79"/><text x="-38" y="83">100000</text>
+          <line class="gridline" x1="0" y1="103" x2="350" y2="103"/><text x="-32" y="107">50000</text>
+          <line class="gridline" x1="0" y1="127" x2="350" y2="127"/><text x="-15" y="131">0</text>
+          <line class="gridline" x1="0" y1="151" x2="350" y2="151"/><text x="-38" y="155">-50000</text>
+          <line class="gridline" x1="0" y1="175" x2="350" y2="175"/><text x="-45" y="179">-100000</text>
+          <line class="gridline" x1="0" y1="199" x2="350" y2="199"/><text x="-45" y="203">-150000</text>
+          <g>
+            <rect x="11" y="127" width="10" height="48" fill="#2e86de"/><rect x="21" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="57" y="127" width="10" height="48" fill="#2e86de"/><rect x="67" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="103" y="127" width="10" height="48" fill="#2e86de"/><rect x="113" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="149" y="127" width="10" height="48" fill="#2e86de"/><rect x="159" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="195" y="127" width="10" height="48" fill="#2e86de"/><rect x="205" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="241" y="127" width="10" height="48" fill="#2e86de"/><rect x="251" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="287" y="127" width="10" height="48" fill="#2e86de"/><rect x="297" y="31" width="10" height="96" fill="#49c7dc"/>
+            <rect x="333" y="127" width="10" height="48" fill="#2e86de"/><rect x="343" y="31" width="10" height="96" fill="#49c7dc"/>
+          </g>
+          <polyline points="16,40 62,40 108,40 154,40 200,40 246,40 292,40 338,40" fill="none" stroke="#f7941d" stroke-width="2"/>
+          <g fill="#49c7dc" stroke="#111" stroke-width="1.5">
+            <circle cx="16" cy="40" r="4"/><circle cx="62" cy="40" r="4"/><circle cx="108" cy="40" r="4"/><circle cx="154" cy="40" r="4"/>
+            <circle cx="200" cy="40" r="4"/><circle cx="246" cy="40" r="4"/><circle cx="292" cy="40" r="4"/><circle cx="338" cy="40" r="4"/>
+          </g>
+          <g class="small"><text x="0" y="222">2025-01</text><text x="45" y="222">2025-02</text><text x="91" y="222">2025-03</text><text x="137" y="222">2025-04</text><text x="183" y="222">2025-05</text><text x="229" y="222">2025-06</text><text x="275" y="222">2025-07</text><text x="321" y="222">2025-08</text></g>
+        </g>
+      </defs>
+    </svg>
+
+    <button class="agent-fab" id="agentFab" type="button" aria-label="開啟 Data Agent">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3"/><path d="M8 6h8a5 5 0 0 1 5 5v4a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-4a5 5 0 0 1 5-5Z"/><path d="M8.5 13h.01"/><path d="M15.5 13h.01"/><path d="M9 17c1.7 1 4.3 1 6 0"/></svg>
+    </button>
+
+    <div class="agent-backdrop" id="agentBackdrop" aria-hidden="true"></div>
+
+    <aside class="agent-shell" id="agentShell" aria-label="Data Agent 對話視窗" aria-hidden="true">
+      <header class="agent-header">
+        <span class="agent-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 3 14 9l6 2-6 2-2 6-2-6-6-2 6-2 2-6Z" fill="white"/></svg>
+        </span>
+        <h2>Data Agent</h2>
+        <button class="agent-close" id="agentClose" type="button" aria-label="關閉">×</button>
+      </header>
+
+      <div class="agent-body">
+        <section class="agent-card">
+          <div class="agent-toolbar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M20 18a8 8 0 1 0-3.2 2.4"/><path d="M16 18h6"/><path d="M19 15v6"/></svg>
+          </div>
+
+          <div class="agent-intro">
+            <div class="agent-avatar" aria-hidden="true"></div>
+            <h3>營運資金分析--錸創營運能力小助手</h3>
+          </div>
+
+          <p class="agent-copy">
+            您好，我是營運資金分析助理。我可以協助您查詢各幣別餘額、預估現金流入流出、USD 匯率變化、集團與錸顯未來資金水位，並先用目前儀表板資料提供分析建議。未來可串接 AI API，改成即時讀取資料後回覆。
+          </p>
+
+          <div class="agent-prompts">
+            <div class="agent-tabs" role="tablist" aria-label="問題分類">
+              <button class="active" type="button" data-topic="balance">資金餘額概覽</button>
+              <button type="button" data-topic="cashflow">現金流分析</button>
+              <button type="button" data-topic="fx">匯率與風險</button>
+            </div>
+            <ul class="prompt-list" id="promptList">
+              <li><button type="button">目前各幣別總金額是多少？</button></li>
+              <li><button type="button">集團與錸顯的幣別結構有什麼差異？</button></li>
+              <li><button type="button">未來六個月資金水位是否安全？</button></li>
+            </ul>
+          </div>
+
+          <div class="agent-messages" id="agentMessages" aria-live="polite"></div>
+
+          <form class="agent-input" id="agentForm">
+            <textarea id="agentQuestion" placeholder="在此輸入任何您想查詢或分析的問題"></textarea>
+            <div class="agent-actions">
+              <button class="agent-icon-btn" type="button" aria-label="附加檔案">
+                <svg viewBox="0 0 24 24"><path d="m21.4 11.6-8.5 8.5a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/><path d="M18 16v6"/><path d="M15 19h6"/></svg>
+              </button>
+              <button class="agent-icon-btn send" type="submit" aria-label="送出問題">
+                <svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+              </button>
+            </div>
+          </form>
+          <p class="agent-note">內容均由AI生成，僅供參考</p>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const dashboardFacts = {
+      totals: "NTD 8,000,000 元、USD 50,000 元、JPY 90,000 元，另外兩個自訂幣別目前各為 90,000 元。",
+      mix: "集團與錸顯的圖表範例中，USD 佔比最大約 80，JPY 約 40，NTD 約 30，OTHER 約 5。兩者結構接近，代表主要資金風險會集中在 USD 與 JPY 部位。",
+      cashflow: "2025/01 到 2025/06 預估現金流入約從 100,000 到 300,000 元，現金流出每月約 -300,000 元，部分月份有小額淨流出標示。5 月與 6 月流入提高，但仍要觀察流出是否固定維持高檔。",
+      runway: "未來六個月底資金水位圖中，預估進帳大約維持在 200,000 元附近，預估費用約 -100,000 元，警戒線約在 180,000 元。若收入準時入帳，水位看起來高於警戒線。",
+      fx: "USD 近期匯率與去年同期比較呈現 26 到 40 區間內的波動，2 月中下旬線圖有明顯上下震盪。若公司有 USD 收付款，建議把付款期與換匯點分開追蹤。"
+    };
+
+    const topicPrompts = {
+      balance: ["目前各幣別總金額是多少？", "集團與錸顯的幣別結構有什麼差異？", "未來六個月資金水位是否安全？"],
+      cashflow: ["2025/01~2025/06 現金流入流出趨勢？", "哪幾個月份需要特別注意現金流？", "含 CB+CI 後資金水位有改善嗎？"],
+      fx: ["USD 匯率近期波動怎麼看？", "匯率變動會影響哪些資金決策？", "我應該追蹤哪些匯率風險指標？"]
+    };
+
+    const agentFab = document.getElementById("agentFab");
+    const agentShell = document.getElementById("agentShell");
+    const agentClose = document.getElementById("agentClose");
+    const agentBackdrop = document.getElementById("agentBackdrop");
+    const promptList = document.getElementById("promptList");
+    const agentMessages = document.getElementById("agentMessages");
+    const agentForm = document.getElementById("agentForm");
+    const agentQuestion = document.getElementById("agentQuestion");
+
+    function openAgent() {
+      document.body.classList.add("agent-open");
+      agentShell.setAttribute("aria-hidden", "false");
+      setTimeout(() => agentQuestion.focus(), 260);
+    }
+
+    function closeAgent() {
+      document.body.classList.remove("agent-open");
+      agentShell.setAttribute("aria-hidden", "true");
+    }
+
+    function addMessage(text, type = "agent") {
+      const message = document.createElement("div");
+      message.className = `agent-message ${type}`;
+      message.textContent = text;
+      agentMessages.appendChild(message);
+      message.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    function answerQuestion(question) {
+      const q = question.toLowerCase();
+      if (q.includes("幣別") || q.includes("總金額") || q.includes("餘額")) {
+        return `依目前儀表板，${dashboardFacts.totals} ${dashboardFacts.mix}`;
+      }
+      if (q.includes("現金流") || q.includes("流入") || q.includes("流出") || q.includes("cb") || q.includes("ci")) {
+        return `${dashboardFacts.cashflow} 含 CB+CI 的版本把進帳水位拉到約 300,000 元，視覺上比未含 CB+CI 更有緩衝。`;
+      }
+      if (q.includes("匯率") || q.includes("usd") || q.includes("風險")) {
+        return `${dashboardFacts.fx} 建議後續讓 AI 讀取每日匯率與應收應付款日期，產生換匯提醒。`;
+      }
+      if (q.includes("安全") || q.includes("水位") || q.includes("警戒")) {
+        return `${dashboardFacts.runway} 不過這只是預估圖，真正決策前還需要比對銀行實際餘額、應收帳款收款日與大額付款排程。`;
+      }
+      return `我先依這張「錸創營運能力」儀表板回答：${dashboardFacts.totals} ${dashboardFacts.cashflow} 若之後接上 AI API，我可以改成讀取即時資料後，自動產生原因分析與改善建議。`;
+    }
+
+    function submitQuestion(question) {
+      const cleanQuestion = question.trim();
+      if (!cleanQuestion) return;
+      addMessage(cleanQuestion, "user");
+      agentQuestion.value = "";
+      setTimeout(() => addMessage(answerQuestion(cleanQuestion)), 280);
+    }
+
+    function renderPrompts(topic) {
+      promptList.innerHTML = "";
+      topicPrompts[topic].forEach((text) => {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = text;
+        button.addEventListener("click", () => submitQuestion(text));
+        item.appendChild(button);
+        promptList.appendChild(item);
+      });
+    }
+
+    document.querySelectorAll(".agent-tabs button").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".agent-tabs button").forEach((button) => button.classList.remove("active"));
+        tab.classList.add("active");
+        renderPrompts(tab.dataset.topic);
+      });
+    });
+
+    promptList.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => submitQuestion(button.textContent));
+    });
+
+    agentForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitQuestion(agentQuestion.value);
+    });
+
+    agentQuestion.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        submitQuestion(agentQuestion.value);
+      }
+    });
+
+    agentFab.addEventListener("click", openAgent);
+    agentClose.addEventListener("click", closeAgent);
+    agentBackdrop.addEventListener("click", closeAgent);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeAgent();
+    });
+  </script>
+</body>
+</html>
